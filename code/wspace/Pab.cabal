@@ -1,0 +1,355 @@
+cabal-version:      3.4
+name:               wspace
+version:            0.1.0.0
+author:             IOG's education team, Bernard Sibanda
+maintainer:         education@iohk.io, cto@wims.io
+license:            Apache-2.0
+build-type:         Simple
+
+common common-all
+    build-depends:
+        base ^>=4.14.3.0,
+        aeson,
+        bytestring,
+        containers,
+        cardano-api,
+        data-default,
+        plutus-ledger-api,
+        cardano-ledger-core,
+        plutus-tx-plugin,
+        plutus-tx,
+        base16-bytestring,
+        text,
+        serialise,
+        utilities,
+        cardano-ledger-shelley,
+        bech32 >=1.1 && <2.0,
+        time
+    default-language: Haskell2010
+    ghc-options:
+        -Wno-unused-packages
+        -fobject-code
+        -fno-ignore-interface-pragmas
+        -fno-omit-interface-pragmas
+        -fno-strictness
+        -fno-spec-constr
+        -fno-specialise
+        -fexpose-all-unfoldings
+        -fplugin-opt PlutusTx.Plugin:defer-errors
+
+common common-all-tests
+    import:           common-all
+    build-depends:
+      QuickCheck,
+      tasty,
+      tasty-hunit,
+      bytestring,
+      base16-bytestring,
+      plutus-simple-model,
+      plutus-ledger-api
+    default-language: Haskell2010
+
+library 
+    import:            common-all
+    hs-source-dirs:    lecture
+    exposed-modules:
+      CGPlutusUtilsv1
+      CGTime
+      Demo
+      Mint
+      ParameterizedVesting
+      Vesting
+      SimpleValidator
+    build-depends:
+      base >=4.14 && <5,      
+      time,
+      bytestring
+    default-language: Haskell2010
+
+executable will-exe
+    main-is:            Will.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable research-exe
+    main-is:            Research.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable pab-exe
+    main-is:            Pab.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable index-fund-exe
+    main-is:            Indexfund.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable onchain-exe
+    main-is:            Onchain.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable swap-exe
+    main-is:            Swap.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable nft-floor-exe
+    main-is:            NftFloor.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010 
+
+executable bonding-curve-exe
+    main-is:            BondingCurve.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010        
+
+executable dutch-auction-exe
+    main-is:            DutchAuction.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable insurance-exe
+    main-is:            Insurance.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable customer-exe
+    main-is:            Customer.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010        
+
+executable english-auction-exe
+    main-is:            EnglishAuction.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010 
+
+executable social-media-exe
+    main-is:            SocialMedia.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010 
+
+executable governance-exe
+    main-is:            Governance.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010         
+
+executable mev-resistant-exe
+    main-is:            MevResistant.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+executable option-settlement-escrow-exe
+    main-is:            OptionSettlementEscrow.hs
+    hs-source-dirs:     tests
+    build-depends:
+        base >=4.14 && <5,
+        plutus-ledger-api,
+        plutus-tx,
+        plutus-tx-plugin,
+        bytestring,
+        serialise,
+        text,
+        containers,
+        cardano-api,
+        cardano-ledger-core,
+        cardano-ledger-shelley
+    default-language:   Haskell2010
+
+test-suite wspace-tests
+    import:              common-all-tests
+    type:                exitcode-stdio-1.0
+    hs-source-dirs:      tests
+    main-is:             Spec.hs
+    build-depends:
+      wspace,
+      utilities
+    other-modules:
+      CGPlutusUtilsSpec
+      CGTimeSpec
+      ParameterizedVestingSpec
+      VestingSpec
+      DemoSpec
+    default-language:    Haskell2010

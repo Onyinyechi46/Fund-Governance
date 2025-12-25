@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardano Fund Governance Protocol</title>
+
+    <!-- Enhanced Professional Style -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #0072ff, #00c6ff);
+            --success-gradient: linear-gradient(135deg, #28a745, #20c997);
+            --danger-gradient: linear-gradient(135deg, #dc3545, #c82333);
+            --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
+            --card-bg: #ffffff;
+            --card-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            --border-radius: 20px;
+            --font-primary: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .header {
+            background: var(--dark-gradient);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            animation: moveBackground 20s linear infinite;
+        }
+        
+        .header h1 {
+            font-size: 2.6em;
+            margin-bottom: 15px;
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .header h1 i {
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            padding: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+                gap: 20px;
+            }
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .card:nth-child(1)::before { background: var(--secondary-gradient); }
+        .card:nth-child(2)::before { background: var(--success-gradient); }
+        .card:nth-child(3)::before { background: var(--success-gradient); }
+        .card:nth-child(4)::before { background: var(--danger-gradient); }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 114, 255, 0.2);
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            font-size: 1.2em;
+        }
+        
+        .input-group { 
+            margin-bottom: 25px; 
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95em;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            font-size: 15px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: var(--font-primary);
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #0072ff;
+            box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: var(--font-primary);
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn-primary { 
+            background: var(--secondary-gradient); 
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0066e6, #00b8ff);
+        }
+        
+        .btn-success { 
+            background: var(--success-gradient); 
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #23963d, #1cb487);
+        }
+        
+        .btn-danger { 
+            background: var(--danger-gradient); 
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #d02535, #b81f2d);
+        }
+        
+        .info-panel {
+            grid-column: 1 / -1;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+        
+        .info-panel h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-panel p {
+            line-height: 1.7;
+            color: #37474f;
+            font-size: 1.05em;
+        }
+        
+        .log-container {
+            grid-column: 1 / -1;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid #333;
+            position: relative;
+        }
+        
+        .log-container::before {
+            content: 'SYSTEM LOG';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #1a1a1a;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #aaa;
+            font-weight: 600;
+        }
+        
+        .status-indicator {
+            grid-column: 1 / -1;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .status-indicator i {
+            font-size: 1.5em;
+            color: #f39c12;
+        }
+        
+        .status-text {
+            flex: 1;
+        }
+        
+        .status-text h4 {
+            color: #d35400;
+            margin-bottom: 5px;
+        }
+        
+        .status-text p {
+            color: #7d6608;
+            font-size: 0.95em;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes moveBackground {
+            from { transform: translateX(0) translateY(0); }
+            to { transform: translateX(10px) translateY(10px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1><i class="fas fa-shield-alt"></i> Cardano Fund Governance Protocol</h1>
+        <p>Secure multi-signature fund management with time-locked releases and automated refunds on the Cardano blockchain.</p>
+    </div>
+
+    <div class="content">
+
+        <!-- STATUS INDICATOR -->
+        <div class="status-indicator">
+            <i class="fas fa-sync-alt pulse"></i>
+            <div class="status-text">
+                <h4>Protocol Status: Active</h4>
+                <p>Connect your Cardano wallet to interact with the governance protocol. Ensure you have sufficient ADA for transaction fees.</p>
+            </div>
+        </div>
+
+        <!-- DEPOSIT -->
+        <div class="card">
+            <h2><i class="fas fa-lock"></i> Deposit Funds</h2>
+            <p class="card-description">Lock ADA in the governance contract with custom approval requirements.</p>
+
+            <div class="input-group">
+                <label>Deposit Amount (ADA) <span class="tooltip">ⓘ<span class="tooltiptext">Minimum 5 ADA required for contract deployment</span></span></label>
+                <input type="number" id="depositAmt" placeholder="e.g. 100" min="5" step="0.1">
+            </div>
+
+            <div class="input-group">
+                <label>Owner Address</label>
+                <input type="text" id="owner" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
+            </div>
+
+            <div class="input-group">
+                <label>Official 1 Address</label>
+                <input type="text" id="fdOfficial1" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
+            </div>
+
+            <div class="input-group">
+                <label>Official 2 Address</label>
+                <input type="text" id="fdOfficial2" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
+            </div>
+
+            <div class="input-group">
+                <label>Required Approvals <span class="tooltip">ⓘ<span class="tooltiptext">Number of approvals needed to release funds (1-2)</span></span></label>
+                <input type="number" id="req" placeholder="2" min="1" max="2" value="2">
+            </div>
+
+            <div class="input-group">
+                <label>Deadline (Days) <span class="tooltip">ⓘ<span class="tooltiptext">After this period, refund becomes available if insufficient approvals</span></span></label>
+                <input type="number" id="deadlineDays" placeholder="30" min="1" max="365" value="30">
+            </div>
+
+            <button class="btn btn-primary" id="depositBtn">
+                <i class="fas fa-arrow-down"></i> Lock Funds
+            </button>
+        </div>
+
+        <!-- APPROVAL -->
+        <div class="card">
+            <h2><i class="fas fa-check-double"></i> Approve Release</h2>
+            <p class="card-description">Authorized officials can approve fund releases. Each approval is recorded on-chain and counted toward the required threshold.</p>
+
+            <div class="input-group">
+                <label>Contract ID <span class="tooltip">ⓘ<span class="tooltiptext">Enter the contract ID from the deposit transaction</span></span></label>
+                <input type="text" id="contractId" placeholder="Transaction hash">
+            </div>
+
+            <div class="input-group">
+                <label>Official Address</label>
+                <input type="text" id="approverAddress" placeholder="Your official address">
+            </div>
+
+            <button class="btn btn-success" id="approveBtn">
+                <i class="fas fa-thumbs-up"></i> Submit Approval
+            </button>
+        </div>
+
+        <!-- RELEASE -->
+        <div class="card">
+            <h2><i class="fas fa-unlock-alt"></i> Release Funds</h2>
+            <p class="card-description">Release locked funds after reaching required approvals before the deadline.</p>
+
+            <div class="input-group">
+                <label>Contract ID</label>
+                <input type="text" id="releaseContractId" placeholder="Transaction hash">
+            </div>
+
+            <div class="input-group">
+                <label>Recipient Address</label>
+                <input type="text" id="recipientAddress" placeholder="Funds destination address">
+            </div>
+
+            <button class="btn btn-success" id="releaseBtn">
+                <i class="fas fa-paper-plane"></i> Execute Release
+            </button>
+        </div>
+
+        <!-- REFUND -->
+        <div class="card">
+            <h2><i class="fas fa-history"></i> Refund Expired</h2>
+            <p class="card-description">Refund locked funds to owner after deadline if insufficient approvals were received.</p>
+
+            <div class="input-group">
+                <label>Contract ID</label>
+                <input type="text" id="refundContractId" placeholder="Transaction hash">
+            </div>
+
+            <div class="input-group">
+                <label>Owner Verification</label>
+                <input type="text" id="ownerVerification" placeholder="Original owner address">
+            </div>
+
+            <button class="btn btn-danger" id="refundBtn">
+                <i class="fas fa-arrow-left"></i> Initiate Refund
+            </button>
+        </div>
+
+        <!-- INFO -->
+        <div class="info-panel">
+            <h3><i class="fas fa-info-circle"></i> Protocol Governance Model</h3>
+            <p>
+                The Cardano Fund Governance Protocol implements a secure multi-signature escrow system. 
+                Funds are locked in a Plutus smart contract and require a predetermined number of approvals 
+                from authorized officials before release. If the approval threshold isn't met before the 
+                deadline, the original owner can claim a refund. All transactions are immutable, transparent, 
+                and verifiable on the Cardano blockchain.
+            </p>
+            <p style="margin-top: 15px; font-weight: 500;">
+                <i class="fas fa-shield-check"></i> Security Features: On-chain validation • Time-locked refunds • 
+                Multi-signature requirements • Address whitelisting
+            </p>
+        </div>
+
+        <!-- LOG -->
+        <div class="log-container" id="log">
+=== SYSTEM INITIALIZED ===
+• Cardano Fund Governance Protocol v1.0
+• Ready to connect to blockchain
+• Waiting for wallet connection...
+        </div>
+
+    </div>
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

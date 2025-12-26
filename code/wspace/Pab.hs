@@ -152,6 +152,9 @@ mkValidator d r p =
 validator :: Validator
 validator = mkValidatorScript $$(PlutusTx.compile [|| mkValidator ||])
 
+getCbor :: IO ()
+getCbor = writeValidatorToFile "./assets/governance.plutus" validator
+
 --- ============================================================================
 -- TEST DATA
 --- ============================================================================

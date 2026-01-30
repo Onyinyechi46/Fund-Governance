@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow - Cardano Fund Governance Protocol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --dark-blue: #003d7a;
+            --light-blue: #4d94ff;
+            --accent-blue: #00aaff;
+            --black: #0a0e27;
+            --dark-gray: #1a1f3a;
+            --white: #ffffff;
+            --off-white: #f5f7fa;
+            --text-gray: #6b7280;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-blue), transparent);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-blue), transparent);
+            bottom: 20%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--light-blue), transparent);
+            top: 60%;
+            left: 30%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 102, 204, 0.2);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: var(--accent-blue);
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .nav-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        /* Main Container */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 120px 40px 80px;
+        }
+
+        /* Hero Section */
+        .workflow-hero {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .workflow-hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .workflow-hero p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 80px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.5s;
+        }
+
+        .progress-dot.active {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.6);
+        }
+
+        .progress-line {
+            width: 60px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-line.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+            animation: fillLine 0.8s ease;
+        }
+
+        @keyframes fillLine {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Workflow Container */
+        .workflow-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Workflow Step */
+        .workflow-step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .workflow-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .workflow-step.active {
+            border-color: var(--accent-blue);
+            background: rgba(0, 170, 255, 0.08);
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.3);
+            transform: scale(1.02);
+        }
+
+        .workflow-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-blue), var(--accent-blue));
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.5s;
+        }
+
+        .workflow-step.active::before {
+            transform: scaleY(1);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .step-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--white);
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-number {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(0, 170, 255, 0.2);
+            border: 1px solid rgba(0, 170, 255, 0.4);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+        }
+
+        .step-info h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+
+        .step-info p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+        }
+
+        .step-content {
+            margin-bottom: 30px;
+        }
+
+        .feature-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(10px);
+        }
+
+        .feature-item i {
+            font-size: 24px;
+            color: var(--accent-blue);
+            flex-shrink: 0;
+        }
+
+        .feature-item div h4 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--white);
+        }
+
+        .feature-item div p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        /* Action Button */
+        .step-action {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-step {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-step::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-step:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.5);
+        }
+
+        .btn-step span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-step.completed {
+            background: linear-gradient(135deg, var(--success), #1e7e34);
+            cursor: default;
+        }
+
+        .btn-step:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .step-status i {
+            animation: checkmark 0.5s ease;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Connecting Arrow */
+        .connecting-arrow {
+            text-align: center;
+            margin: -20px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .arrow-line {
+            width: 4px;
+            height: 60px;
+            background: linear-gradient(180deg, var(--primary-blue), var(--accent-blue));
+            margin: 0 auto;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.5);
+            animation: flowDown 2s infinite;
+        }
+
+        @keyframes flowDown {
+            0% { transform: translateY(-30px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(60px); opacity: 0; }
+        }
+
+        .arrow-head {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 20px solid var(--accent-blue);
+            margin: -2px auto 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Decision Split */
+        .decision-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .decision-path {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .decision-path:hover {
+            border-color: var(--accent-blue);
+            background: rgba(0, 170, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .decision-path h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .decision-path h3 i {
+            color: var(--accent-blue);
+        }
+
+        .decision-path p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .decision-path ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .decision-path li {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.65);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .decision-path li i {
+            color: var(--success);
+            margin-top: 3px;
+        }
+
+        /* Completion Section */
+        .completion-section {
+            text-align: center;
+            padding: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completion-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: movePattern 20s linear infinite;
+        }
+
+        @keyframes movePattern {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .completion-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: scaleIn 0.6s ease;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .completion-icon i {
+            font-size: 60px;
+            color: var(--success);
+        }
+
+        .completion-section h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
+        }
+
+        .completion-section p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .completion-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-large {
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary-blue);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .feature-grid-mini {
+                grid-template-columns: 1fr;
+            }
+
+            .decision-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 100px 20px 60px;
+            }
+
+            .workflow-hero h1 {
+                font-size: 36px;
+            }
+
+            .workflow-step {
+                padding: 30px 20px;
+            }
+
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-info h2 {
+                font-size: 24px;
+            }
+
+            .completion-section {
+                padding: 40px 20px;
+            }
+
+            .completion-actions {
+                flex-direction: column;
+            }
+
+            .btn-large {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>Cardano Governance</span>
+            </a>
+            <div class="nav-actions">
+                <a href="index.html" class="nav-btn secondary">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="overview.html" class="nav-btn secondary">
+                    <i class="fas fa-info-circle"></i> Overview
+                </a>
+                <a href="documentation.html" class="nav-btn primary">
+                    <i class="fas fa-book"></i> Documentation
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="workflow-hero">
+            <h1>Complete Governance Workflow</h1>
+            <p>Follow the interactive journey from locking funds to final release or refund. Each step is secured by blockchain technology and multi-signature protocols.</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator" id="progressIndicator">
+            <div class="progress-dot active" data-step="0"></div>
+            <div class="progress-line" data-step="0"></div>
+            <div class="progress-dot" data-step="1"></div>
+            <div class="progress-line" data-step="1"></div>
+            <div class="progress-dot" data-step="2"></div>
+            <div class="progress-line" data-step="2"></div>
+            <div class="progress-dot" data-step="3"></div>
+        </div>
+
+        <!-- Workflow Container -->
+        <div class="workflow-container">
+            <!-- Step 1: Lock Funds -->
+            <div class="workflow-step active visible" id="step1" data-step="0">
+                <div class="step-header">
+                    <div class="step-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">STEP 1</div>
+                        <h2>Lock Funds</h2>
+                        <p>Deposit your ADA into a secure smart contract with multi-signature governance rules. This creates an immutable vault that requires official approvals for any withdrawal.</p>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <div class="feature-grid-mini">
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h4>Blockchain Security</h4>
+                                <p>Funds protected by Cardano's Plutus smart contracts</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-users-cog"></i>
+                            <div>
+                                <h4>Multi-Signature Setup</h4>
+                                <p>Define officials and approval thresholds</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Time-Locked</h4>
+                                <p>Set deadlines for approval collection</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-undo-alt"></i>
+                            <div>
+                                <h4>Refund Protection</h4>
+                                <p>Automatic refund if approvals not met</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-action">
+                    <button class="btn-step" onclick="completeStep(1)">
+                        <span>Lock Funds in Contract</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="connecting-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+            </div>
+
+            <!-- Step 2: Approve -->
+            <div class="workflow-step" id="step2" data-step="1">
+                <div class="step-header">
+                    <div class="step-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">STEP 2</div>
+                        <h2>Collect Approvals</h2>
+                        <p>Authorized officials review the fund release request and submit their approvals on-chain. Each signature is cryptographically verified and permanently recorded.</p>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <div class="feature-grid-mini">
+                        <div class="feature-item">
+                            <i class="fas fa-signature"></i>
+                            <div>
+                                <h4>Digital Signatures</h4>
+                                <p>Cryptographic proof of official approval</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <h4>Real-Time Tracking</h4>
+                                <p>Monitor approval progress live on-chain</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-history"></i>
+                            <div>
+                                <h4>Immutable Record</h4>
+                                <p>All approvals permanently timestamped</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-double"></i>
+                            <div>
+                                <h4>Threshold Verification</h4>
+                                <p>Smart contract validates approval count</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-action">
+                    <button class="btn-step" onclick="completeStep(2)" disabled>
+                        <span>Submit Approval</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="connecting-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+            </div>
+
+            <!-- Step 3: Decision Point -->
+            <div class="workflow-step" id="step3" data-step="2">
+                <div class="step-header">
+                    <div class="step-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">STEP 3</div>
+                        <h2>Release or Refund</h2>
+                        <p>Based on the approval status and deadline, funds are either released to the recipient or refunded to the owner. The smart contract handles this automatically.</p>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <div class="decision-split">
+                        <div class="decision-path" onclick="selectPath('release')">
+                            <h3>
+                                <i class="fas fa-unlock-alt"></i>
+                                Release Funds
+                            </h3>
+                            <p>When sufficient approvals are collected before the deadline, funds are released to the designated recipient address.</p>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Threshold met</li>
+                                <li><i class="fas fa-check"></i> Deadline not passed</li>
+                                <li><i class="fas fa-check"></i> Instant transfer</li>
+                                <li><i class="fas fa-check"></i> Transaction recorded</li>
+                            </ul>
+                        </div>
+
+                        <div class="decision-path" onclick="selectPath('refund')">
+                            <h3>
+                                <i class="fas fa-undo-alt"></i>
+                                Refund Owner
+                            </h3>
+                            <p>If approvals aren't collected by the deadline, the original owner can claim a full refund of the locked funds.</p>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Deadline passed</li>
+                                <li><i class="fas fa-check"></i> Threshold not met</li>
+                                <li><i class="fas fa-check"></i> Owner verification</li>
+                                <li><i class="fas fa-check"></i> Full fund recovery</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connecting-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+            </div>
+
+            <!-- Step 4: Completion -->
+            <div class="workflow-step" id="step4" data-step="3" style="display: none;">
+                <div class="completion-section">
+                    <div class="completion-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Workflow Complete!</h2>
+                    <p>The governance process has been completed successfully. All transactions are permanently recorded on the Cardano blockchain for complete transparency and auditability.</p>
+                    <div class="completion-actions">
+                        <a href="index.html" class="btn-large btn-white">
+                            <i class="fas fa-home"></i> Return to Home
+                        </a>
+                        <a href="deposit.html" class="btn-large btn-outline">
+                            <i class="fas fa-sync-alt"></i> Start New Process
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+
+        function updateProgress(step) {
+            const dots = document.querySelectorAll('.progress-dot');
+            const lines = document.querySelectorAll('.progress-line');
+
+            dots.forEach((dot, index) => {
+                if (index <= step) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            lines.forEach((line, index) => {
+                if (index < step) {
+                    line.classList.add('active');
+                } else {
+                    line.classList.remove('active');
+                }
+            });
+        }
+
+        function completeStep(stepNumber) {
+            const currentStepEl = document.getElementById(`step${stepNumber}`);
+            const nextStepEl = document.getElementById(`step${stepNumber + 1}`);
+            const button = currentStepEl.querySelector('.btn-step');
+
+            // Mark current step as completed
+            button.classList.add('completed');
+            button.innerHTML = '<span><i class="fas fa-check"></i> Completed</span>';
+            button.disabled = true;
+
+            // Update step styles
+            currentStepEl.classList.remove('active');
+            
+            // Show and activate next step
+            setTimeout(() => {
+                if (nextStepEl) {
+                    nextStepEl.classList.add('visible');
+                    setTimeout(() => {
+                        nextStepEl.classList.add('active');
+                        const nextButton = nextStepEl.querySelector('.btn-step');
+                        if (nextButton) {
+                            nextButton.disabled = false;
+                        }
+                    }, 300);
+
+                    // Update progress
+                    currentStep = stepNumber;
+                    updateProgress(currentStep);
+
+                    // Smooth scroll to next step
+                    nextStepEl.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }
+            }, 500);
+        }
+
+        function selectPath(path) {
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+            const button = step3.querySelector('.btn-step');
+
+            // If button doesn't exist, create it
+            if (!button) {
+                const actionDiv = document.createElement('div');
+                actionDiv.className = 'step-action';
+                actionDiv.style.marginTop = '30px';
+                actionDiv.innerHTML = `
+                    <button class="btn-step completed">
+                        <span><i class="fas fa-check"></i> ${path === 'release' ? 'Funds Released' : 'Refund Processed'}</span>
+                    </button>
+                `;
+                step3.appendChild(actionDiv);
+            }
+
+            // Highlight selected path
+            const paths = document.querySelectorAll('.decision-path');
+            paths.forEach(p => {
+                p.style.opacity = '0.5';
+                p.style.transform = 'scale(0.95)';
+            });
+            event.currentTarget.style.opacity = '1';
+            event.currentTarget.style.transform = 'scale(1)';
+
+            // Show completion step
+            setTimeout(() => {
+                step3.classList.remove('active');
+                step4.style.display = 'block';
+                setTimeout(() => {
+                    step4.classList.add('visible');
+                    setTimeout(() => {
+                        step4.classList.add('active');
+                        currentStep = 3;
+                        updateProgress(currentStep);
+                        step4.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }, 300);
+                }, 100);
+            }, 1000);
+        }
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.workflow-step').forEach(step => {
+            observer.observe(step);
+        });
+
+        // Initialize first step
+        window.addEventListener('load', () => {
+            updateProgress(0);
+        });
+    </script>
+    <!-- End of HTML content -->
+

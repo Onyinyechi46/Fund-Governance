@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardano Governance - Fund Management</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    /* Basic Reset */
+    * { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
+    body { background: linear-gradient(135deg,#0a0e27,#1a1f3a); color:white; min-height:100vh; }
+
+    /* Main Container Grid */
+    .main-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        max-width: 1600px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    /* Card Styles */
+    .card {
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:20px;
+        padding:30px;
+        margin-bottom:30px;
+        animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+    /* Card Header */
+    .card-title {
+        display:flex; align-items:center; gap:15px; margin-bottom:20px;
+        border-bottom:2px solid rgba(0,102,204,0.3); padding-bottom:10px;
+    }
+    .card-title i { font-size:28px; color:#00aaff; }
+    .card-title h2 { font-size:22px; color:white; }
+
+    /* Input Group */
+    .input-group { margin-bottom:20px; }
+    .input-group label { display:flex; justify-content:space-between; font-weight:600; color:white; margin-bottom:8px; }
+    .input-group input {
+        width:100%; padding:12px; border-radius:10px; border:2px solid rgba(255,255,255,0.15);
+        background:rgba(255,255,255,0.05); color:white; font-size:16px;
+        transition: all 0.3s;
+    }
+    .input-group input:focus { outline:none; border-color:#00aaff; background:rgba(255,255,255,0.1); }
+
+    /* Info Icon Tooltip */
+    .info-icon { cursor:help; position:relative; color:#00aaff; }
+    .info-icon:hover::after {
+        content: attr(data-tooltip);
+        position:absolute; bottom:100%; right:0;
+        background:#0a0e27; color:white; padding:8px 12px; border-radius:8px;
+        font-size:13px; width:220px; margin-bottom:8px; line-height:1.4;
+    }
+
+    /* Button */
+    .btn { width:100%; padding:16px; border:none; border-radius:12px; background:#0066cc; color:white; font-weight:700; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:10px; transition:0.3s; }
+    .btn:hover { background:#004a99; transform:translateY(-2px); }
+    .btn:active { transform:translateY(0); }
+    .btn .loading-spinner { display:none; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 1s linear infinite; }
+    .btn.loading .loading-spinner { display:block; }
+    .btn.loading .btn-text { display:none; }
+    @keyframes spin { to {transform:rotate(360deg);} }
+
+    /* Left / Right column specific */
+    .left-column .card { animation:fadeInLeft 1s ease; }
+    .right-column .card { animation:fadeInRight 1s ease; }
+    @keyframes fadeInLeft { from {opacity:0; transform:translateX(-20px);} to {opacity:1; transform:translateX(0);} }
+    @keyframes fadeInRight { from {opacity:0; transform:translateX(20px);} to {opacity:1; transform:translateX(0);} }
+
+    /* Responsive */
+    @media(max-width:1000px) { .main-container { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+    <a href="index.html" class="btn" style="width:auto; padding:12px 24px; background:#00aaff;">
+        <i class="fas fa-home"></i> Back to Home
+    </a>
+</div>
+
+<div class="main-container">
+
+<div class="cards-container">
+
+    <!-- ===================== -->
+    <!-- Deposit Card (LEFT)  -->
+    <!-- ===================== -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fas fa-lock"></i>
+            <h2>Deposit Funds</h2>
+        </div>
+
+        <div class="input-group">
+            <label>Deposit Amount (ADA)</label>
+            <input type="number" id="depositAmt" placeholder="e.g. 100" min="5" step="0.1">
+        </div>
+
+        <div class="input-group">
+            <label>Owner Address</label>
+            <input type="text" id="owner" placeholder="addr1...">
+        </div>
+
+        <div class="input-group">
+            <label>Official 1</label>
+            <input type="text" id="fdOfficial1" placeholder="addr1...">
+        </div>
+
+        <div class="input-group">
+            <label>Official 2</label>
+            <input type="text" id="fdOfficial2" placeholder="addr1...">
+        </div>
+
+        <div class="input-group">
+            <label>Required Approvals</label>
+            <input type="number" id="req" min="1" max="2" value="2">
+        </div>
+
+        <div class="input-group">
+            <label>Deadline (days)</label>
+            <input type="number" id="deadlineDays" min="1" max="365" value="30">
+        </div>
+
+        <button id="depositBtn" class="btn">
+            <span class="btn-text">
+                <i class="fas fa-lock"></i> Lock Funds
+            </span>
+            <div class="loading-spinner"></div>
+        </button>
+    </div>
+
+
+    <!-- ===================== -->
+    <!-- Approve Card (RIGHT) -->
+    <!-- ===================== -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fas fa-check-double"></i>
+            <h2>Approve Release</h2>
+        </div>
+
+        <div class="input-group">
+            <label>Contract ID</label>
+            <input type="text" id="approveContractId" placeholder="Transaction hash">
+        </div>
+
+        <div class="input-group">
+            <label>Your Address</label>
+            <input type="text" id="approverAddr" placeholder="addr1...">
+        </div>
+
+        <button id="approveBtn" class="btn">
+            <span class="btn-text">
+                <i class="fas fa-thumbs-up"></i> Submit Approval
+            </span>
+            <div class="loading-spinner"></div>
+        </button>
+    </div>
+
+</div>
+
+   <!-- Right Column: Release + Refund -->
+<div class="right-column">
+
+    <!-- ===================== -->
+    <!-- Release Card -->
+    <!-- ===================== -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fas fa-unlock-alt"></i>
+            <h2>Release Funds</h2>
+        </div>
+
+        <div class="input-group">
+            <label>Contract ID</label>
+            <input type="text" id="releaseContractId" placeholder="Transaction hash">
+        </div>
+
+        <div class="input-group">
+            <label>Recipient Address</label>
+            <input type="text" id="releaseToAddr" placeholder="addr1...">
+        </div>
+
+        <div class="input-group">
+            <label>Number of Approvals</label>
+            <input type="number" id="releaseApprovals" min="1" value="1">
+        </div>
+
+        <button id="releaseBtn" class="btn">
+            <span class="btn-text">
+                <i class="fas fa-unlock-alt"></i> Release Funds
+            </span>
+            <div class="loading-spinner"></div>
+        </button>
+    </div>
+
+
+    <!-- ===================== -->
+    <!-- Refund Card -->
+    <!-- ===================== -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fas fa-undo-alt"></i>
+            <h2>Refund Funds</h2>
+        </div>
+
+        <div class="input-group">
+            <label>Contract ID</label>
+            <input type="text" id="refundContractId" placeholder="Transaction hash">
+        </div>
+
+        <div class="input-group">
+            <label>Owner Address</label>
+            <input type="text" id="refundOwnerAddr" placeholder="addr1...">
+        </div>
+
+        <button id="refundBtn" class="btn">
+            <span class="btn-text">
+                <i class="fas fa-undo-alt"></i> Claim Refund
+            </span>
+            <div class="loading-spinner"></div>
+        </button>
+    </div>
+
+</div>
+
+
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
+

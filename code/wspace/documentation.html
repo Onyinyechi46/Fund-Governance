@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardano Fund Governance - User Documentation</title>
+  
+  <!-- Professional Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---- Global Styles ---- */
+    body { 
+      font-family: 'Roboto', sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background: #f4f6f9; 
+      color: #2c3e50; 
+    }
+    .doc-header { 
+      padding: 2rem; 
+      background: #1a237e; 
+      color: white; 
+      text-align: center; 
+    }
+    .doc-header h1 { margin-bottom: 0.5rem; font-family: 'Lato', sans-serif; }
+    .doc-container { 
+      display: flex; 
+      max-width: 1200px; 
+      margin: 2rem auto; 
+      align-items: flex-start; 
+    }
+    .sidebar { 
+      flex: 0 0 220px; 
+      padding: 1rem; 
+      background: #e8eaf6; 
+      border-radius: 8px; 
+      margin-right: 2rem; 
+    }
+    .sidebar h3 { margin-bottom: 1rem; font-family: 'Lato', sans-serif; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin-bottom: 0.5rem; }
+    .sidebar a { text-decoration: none; color: #1a237e; }
+    .sidebar a.active { font-weight: bold; }
+
+    .main-content { flex: 1; }
+    .section { margin-bottom: 2rem; }
+    .section h2 { 
+      border-bottom: 2px solid #1a237e; 
+      padding-bottom: 0.3rem; 
+      margin-bottom: 1rem; 
+      font-family: 'Lato', sans-serif; 
+      color: #1a237e; 
+    }
+
+    .step-card { 
+      background: white; 
+      border-left: 5px solid #1a237e; 
+      padding: 1rem; 
+      margin-bottom: 1rem; 
+      border-radius: 5px; 
+    }
+    .step-number { 
+      font-size: 1.1rem; 
+      font-weight: 700; 
+      color: #1a237e; 
+      margin-bottom: 0.5rem; 
+    }
+
+    .info-box, .success-box, .warning-box, .error-box { 
+      padding: 1rem; 
+      margin: 1rem 0; 
+      border-radius: 5px; 
+    }
+    .info-box { background: #e3f2fd; border-left: 5px solid #2196f3; }
+    .success-box { background: #e8f5e9; border-left: 5px solid #4caf50; }
+    .warning-box { background: #fff3e0; border-left: 5px solid #ff9800; }
+    .error-box { background: #ffebee; border-left: 5px solid #f44336; }
+    .box-title { font-weight: 700; margin-bottom: 0.5rem; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 0.7rem; text-align: left; }
+    th { background: #1a237e; color: white; font-family: 'Lato', sans-serif; }
+
+    /* Prevent main-content from stretching too far */
+    main.main-content {
+      display: block;
+      overflow: visible;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="doc-header">
+    <h1>📜 Cardano Fund Governance Documentation</h1>
+    <p>Guide to Deposits, Approvals, Fund Release, Refunds, and Roles</p>
+  </div>
+
+  <!-- Container -->
+  <div class="doc-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>Contents</h3>
+      <ul>
+        <li><a href="#introduction" class="active">Introduction</a></li>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#deposit">Deposit</a></li>
+        <li><a href="#approvals">Approvals</a></li>
+        <li><a href="#release">Fund Release</a></li>
+        <li><a href="#refund">Refund Process</a></li>
+        <li><a href="#roles">Roles</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Introduction -->
+      <section id="introduction" class="section">
+        <h2>Introduction</h2>
+        <p>The Cardano Fund Governance system provides a secure and transparent mechanism for managing organizational or community funds. It ensures that all deposits are controlled, approved by designated officials, and only released when conditions are met.</p>
+        <div class="info-box">
+          <div class="box-title">💡 Key Point</div>
+          <p>Funds remain locked in the smart contract until approval conditions are satisfied, preventing unauthorized access or misuse.</p>
+        </div>
+      </section>
+
+      <!-- Getting Started -->
+      <section id="getting-started" class="section">
+        <h2>Getting Started</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4>Wallet Setup</h4>
+          <p>Use a Cardano-compatible wallet (e.g., <b>Lace</b>, <b>Nami</b>, <b>Eternl</b>). Ensure sufficient ADA for deposits and transaction fees.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4>Understand Roles</h4>
+          <p>Familiarize yourself with system roles: Fund Owner, Officials (approvers), and Participants.</p>
+        </div>
+      </section>
+
+      <!-- Deposit -->
+      <section id="deposit" class="section">
+        <h2>Deposit</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4>Create Deposit Proposal</h4>
+          <p>The Fund Owner specifies the deposit amount and a description of the purpose. This proposal will be subject to official review.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4>Send ADA to Smart Contract</h4>
+          <p>Deposit funds using your wallet. The smart contract locks the ADA until official approval is granted.</p>
+        </div>
+        <div class="success-box">
+          <div class="box-title">✅ Deposit Recorded</div>
+          <p>The deposit is securely stored on-chain and becomes eligible for approval.</p>
+        </div>
+      </section>
+
+      <!-- Approvals -->
+      <section id="approvals" class="section">
+        <h2>Approvals</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4>Official Review</h4>
+          <p>Designated officials examine the deposit proposal. Each official either approves or rejects the proposal.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4>Approval Confirmation</h4>
+          <p>Once the required number of officials approve, the deposit qualifies for release. Rejected deposits may be refunded.</p>
+        </div>
+        <div class="warning-box">
+          <div class="box-title">⚠️ Note</div>
+          <p>Only approvals from registered officials are valid. Ensure that all approvals are deliberate and verified.</p>
+        </div>
+      </section>
+
+      <!-- Fund Release -->
+      <section id="release" class="section">
+        <h2>Fund Release</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4>Trigger Release</h4>
+          <p>After approval, the Fund Owner or officials can trigger the release of funds to the intended recipient.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4>Smart Contract Verification</h4>
+          <p>The contract ensures all approval conditions are met before releasing funds on-chain.</p>
+        </div>
+        <div class="success-box">
+          <div class="box-title">✅ Funds Released</div>
+          <p>All transactions are recorded on the blockchain for complete transparency and auditability.</p>
+        </div>
+      </section>
+
+      <!-- Refund Process -->
+      <section id="refund" class="section">
+        <h2>Refund Process</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4>Conditions for Refund</h4>
+          <p>Refunds are issued only if a deposit is rejected or a proposal expires without sufficient approvals.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4>Refund Execution</h4>
+          <p>The smart contract automatically returns the deposit to the participant’s wallet, ensuring security and transparency.</p>
+        </div>
+        <div class="success-box">
+          <div class="box-title">✅ Refund Completed</div>
+          <p>Participants can verify the refund on the Cardano blockchain.</p>
+        </div>
+      </section>
+
+      <!-- Roles -->
+      <section id="roles" class="section">
+        <h2>Roles</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Description</th>
+              <th>Responsibilities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fund Owner</td>
+              <td>Initiates deposits and proposals</td>
+              <td>Submit deposits, trigger fund release, request refunds</td>
+            </tr>
+            <tr>
+              <td>Officials</td>
+              <td>Designated approvers</td>
+              <td>Review deposit proposals and approve or reject them</td>
+            </tr>
+            <tr>
+              <td>Participants</td>
+              <td>Contributors to the fund</td>
+              <td>Deposit funds and track status; receive refunds or releases</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Security -->
+      <section id="security" class="section">
+        <h2>Security</h2>
+        <div class="error-box">
+          <div class="box-title">🔒 Security Best Practices</div>
+          <ul>
+            <li>Never share your wallet seed phrase</li>
+            <li>Verify all wallet addresses before sending ADA</li>
+            <li>Ensure approvals are deliberate and authorized</li>
+            <li>Use a hardware wallet for significant deposits</li>
+            <li>Confirm transactions on-chain before considering them complete</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="section">
+        <h2>FAQ</h2>
+        <div class="step-card">
+          <div class="step-number">Q1</div>
+          <h4>What happens if a proposal is rejected?</h4>
+          <p>The deposited funds can be refunded automatically to participants’ wallets once the rejection is processed on-chain.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">Q2</div>
+          <h4>Can the Fund Owner change the recipient?</h4>
+          <p>No. The recipient is defined in the deposit proposal. Officials can only approve or reject proposals.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">Q3</div>
+          <h4>How can I verify approvals?</h4>
+          <p>All approvals are recorded on-chain and can be checked via your wallet or Cardano blockchain explorer.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>

@@ -1,530 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardano Fund Governance Protocol</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardano Fund Governance Protocol - Secure Multi-Signature Treasury Management</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    /* ================= RESET ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif; color: #0a0e27; line-height: 1.6; overflow-x: hidden; }
 
-    <!-- Enhanced Professional Style -->
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #0072ff, #00c6ff);
-            --success-gradient: linear-gradient(135deg, #28a745, #20c997);
-            --danger-gradient: linear-gradient(135deg, #dc3545, #c82333);
-            --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
-            --card-bg: #ffffff;
-            --card-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            --border-radius: 20px;
-            --font-primary: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+    /* ================= COLORS ================= */
+    :root {
+        --primary-blue: #0066cc;
+        --dark-blue: #003d7a;
+        --accent-blue: #00aaff;
+        --white: #ffffff;
+        --off-white: #f5f7fa;
+        --text-gray: #6b7280;
+    }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        body {
-            font-family: var(--font-primary);
-            background: var(--primary-gradient);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .header {
-            background: var(--dark-gradient);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.1;
-            animation: moveBackground 20s linear infinite;
-        }
-        
-        .header h1 {
-            font-size: 2.6em;
-            margin-bottom: 15px;
-            background: var(--secondary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .header h1 i {
-            margin-right: 15px;
-            font-size: 1.2em;
-        }
-        
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.85;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        .content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            padding: 40px;
-        }
-        
-        @media (max-width: 992px) {
-            .content {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .header {
-                padding: 30px 20px;
-            }
-            
-            .content {
-                padding: 30px 20px;
-                gap: 20px;
-            }
-        }
-        
-        .card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 30px;
-            border: 1px solid #e9ecef;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            border-radius: 15px 15px 0 0;
-        }
-        
-        .card:nth-child(1)::before { background: var(--secondary-gradient); }
-        .card:nth-child(2)::before { background: var(--success-gradient); }
-        .card:nth-child(3)::before { background: var(--success-gradient); }
-        .card:nth-child(4)::before { background: var(--danger-gradient); }
-        
-        .card h2 {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(0, 114, 255, 0.2);
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card h2 i {
-            font-size: 1.2em;
-        }
-        
-        .input-group { 
-            margin-bottom: 25px; 
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #495057;
-            font-size: 0.95em;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            font-size: 15px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            font-family: var(--font-primary);
-        }
-        
-        .input-group input:focus {
-            outline: none;
-            border-color: #0072ff;
-            box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.1);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            color: white;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: var(--font-primary);
-            letter-spacing: 0.5px;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        
-        .btn-primary { 
-            background: var(--secondary-gradient); 
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0066e6, #00b8ff);
-        }
-        
-        .btn-success { 
-            background: var(--success-gradient); 
-        }
-        
-        .btn-success:hover {
-            background: linear-gradient(135deg, #23963d, #1cb487);
-        }
-        
-        .btn-danger { 
-            background: var(--danger-gradient); 
-        }
-        
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #d02535, #b81f2d);
-        }
-        
-        .info-panel {
-            grid-column: 1 / -1;
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 30px;
-            border-radius: 12px;
-            margin-top: 10px;
-        }
-        
-        .info-panel h3 {
-            color: #1565c0;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .info-panel p {
-            line-height: 1.7;
-            color: #37474f;
-            font-size: 1.05em;
-        }
-        
-        .log-container {
-            grid-column: 1 / -1;
-            background: #1a1a1a;
-            color: #00ff00;
-            padding: 25px;
-            border-radius: 12px;
-            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-            font-size: 14px;
-            min-height: 150px;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            max-height: 300px;
-            border: 1px solid #333;
-            position: relative;
-        }
-        
-        .log-container::before {
-            content: 'SYSTEM LOG';
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #1a1a1a;
-            padding: 0 10px;
-            font-size: 12px;
-            color: #aaa;
-            font-weight: 600;
-        }
-        
-        .status-indicator {
-            grid-column: 1 / -1;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-        
-        .status-indicator i {
-            font-size: 1.5em;
-            color: #f39c12;
-        }
-        
-        .status-text {
-            flex: 1;
-        }
-        
-        .status-text h4 {
-            color: #d35400;
-            margin-bottom: 5px;
-        }
-        
-        .status-text p {
-            color: #7d6608;
-            font-size: 0.95em;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes moveBackground {
-            from { transform: translateX(0) translateY(0); }
-            to { transform: translateX(10px) translateY(10px); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-        }
-        
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style>
+    /* ================= NAVIGATION ================= */
+    nav {
+        position: fixed; top: 0; width: 100%;
+        background: rgba(10, 14, 39, 0.95);
+        backdrop-filter: blur(10px); z-index: 1000;
+        padding: 20px 0; border-bottom: 1px solid rgba(0,102,204,0.2);
+        transition: all 0.3s ease;
+    }
+    nav.scrolled { padding: 15px 0; box-shadow: 0 4px 20px rgba(0,102,204,0.1); }
+    .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: var(--white); }
+    .logo i { font-size: 32px; color: var(--accent-blue); }
+    .nav-links { display: flex; gap: 35px; list-style: none; align-items: center; }
+    .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; font-size: 15px; }
+    .nav-links a:hover { color: var(--accent-blue); }
+    .nav-cta { background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); color: var(--white); padding: 12px 28px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,102,204,0.3); }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,102,204,0.4); }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    /* ================= HERO ================= */
+    .hero { background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%); padding: 180px 40px 120px; position: relative; overflow: hidden; }
+    .hero::before {
+        content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
+        background: radial-gradient(circle at 20% 30%, rgba(0,102,204,0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(0,170,255,0.1) 0%, transparent 50%);
+        animation: pulse 15s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.6;} }
+    .hero::after {
+        content: ''; position: absolute; width:600px; height:600px; border-radius:50%;
+        background: radial-gradient(circle, rgba(0,102,204,0.1) 0%, transparent 70%);
+        top:-300px; right:-200px; animation: float 20s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translate(0,0);}50%{transform:translate(-50px,50px);} }
+    .hero-content { max-width:1400px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; position: relative; z-index:2; }
+    .hero-text h1 { font-size:56px; color: var(--white); margin-bottom:24px; line-height:1.1; font-weight:800; animation: fadeInUp 1s ease; }
+    .hero-text .highlight { background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-text p { font-size:20px; color: rgba(255,255,255,0.8); margin-bottom:40px; line-height:1.8; animation: fadeInUp 1.2s ease; }
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+    .hero-buttons { display:flex; gap:20px; animation: fadeInUp 1.4s ease; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); color: var(--white); padding: 18px 40px; border-radius:50px; text-decoration:none; font-weight:700; font-size:16px; transition:all 0.3s; display:inline-flex; align-items:center; gap:10px; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow:0 10px 30px rgba(0,102,204,0.4);}
+    .btn-secondary { background: rgba(255,255,255,0.1); color: var(--white); padding:18px 40px; border-radius:50px; text-decoration:none; font-weight:700; font-size:16px; border:2px solid rgba(255,255,255,0.2); display:inline-flex; align-items:center; gap:10px; transition:all 0.3s; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); border-color: var(--accent-blue); }
+
+    /* ================= HERO VISUAL ================= */
+    .hero-visual { position: relative; height:500px; animation: fadeInUp 1.6s ease; }
+    .center-vault { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:180px; height:180px; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); border-radius:20px; display:flex; align-items:center; justify-content:center; box-shadow:0 20px 60px rgba(0,102,204,0.4); animation:rotate 20s linear infinite; }
+    .center-vault i { font-size:80px; color: var(--white);}
+    @keyframes rotate { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
+    .official-node { position:absolute; width:100px; height:100px; background: var(--white); border:4px solid var(--primary-blue); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(0,102,204,0.3); animation: pulse-node 3s ease-in-out infinite; }
+    .official-node i { font-size:40px; color: var(--primary-blue);}
+    @keyframes pulse-node { 0%,100%{transform:scale(1);box-shadow:0 10px 30px rgba(0,102,204,0.3);}50%{transform:scale(1.1);box-shadow:0 15px 40px rgba(0,102,204,0.5);} }
+    .node-1 { top:0; left:50%; transform:translateX(-50%); animation-delay:0s; }
+    .node-2 { top:50%; right:0; animation-delay:0.5s; }
+    .node-3 { bottom:0; left:50%; transform:translateX(-50%); animation-delay:1s; }
+    .node-4 { top:50%; left:0; animation-delay:1.5s; }
+
+    /* ================= FEATURES ================= */
+    #features { padding:120px 40px; background:var(--off-white); text-align:center; }
+    #features h2 { font-size:48px; margin-bottom:60px; font-weight:800; color:var(--primary-blue);}
+    .features-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:40px; max-width:1400px; margin:0 auto; }
+    .feature-card { background:var(--white); padding:45px; border-radius:24px; box-shadow:0 4px 20px rgba(0,0,0,0.08); transition:all 0.3s; border:2px solid transparent; }
+    .feature-card:hover { transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,102,204,0.15); border-color: var(--accent-blue); }
+    .feature-icon { width:80px; height:80px; background:linear-gradient(135deg,var(--primary-blue),var(--accent-blue)); border-radius:20px; display:flex; align-items:center; justify-content:center; margin-bottom:24px; }
+    .feature-icon i { font-size:40px; color: var(--white);}
+    .feature-card h3 { font-size:24px; margin-bottom:16px; font-weight:700; }
+    .feature-card p { color: var(--text-gray); font-size:16px; line-height:1.8; }
+
+    /* ================= HOW IT WORKS ================= */
+    #how-it-works { padding:120px 40px; background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 100%); color:var(--white); text-align:center; }
+    #how-it-works h2 { font-size:48px; margin-bottom:60px; font-weight:800; }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; max-width:1200px; margin:0 auto; }
+    .step { background: rgba(255,255,255,0.05); backdrop-filter:blur(10px); padding:40px; border-radius:24px; border:1px solid rgba(255,255,255,0.1);}
+    .step span { display:block; font-size:32px; font-weight:800; color:var(--accent-blue); margin-bottom:20px; }
+    .step h3 { font-size:28px; font-weight:700; margin-bottom:16px; }
+    .step p { font-size:17px; line-height:1.8; }
+
+    /* ================= SOLUTIONS ================= */
+    #problems { padding:120px 40px; text-align:center; }
+    #problems h2 { font-size:48px; margin-bottom:60px; font-weight:800; color:var(--primary-blue); }
+    .solutions-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; max-width:1400px; margin:0 auto; }
+    .solution-card { background:var(--white); padding:40px; border-radius:24px; box-shadow:0 4px 20px rgba(0,0,0,0.08); transition:all 0.3s; }
+    .solution-card:hover { transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,102,204,0.15); }
+    .solution-card h3 { font-size:24px; margin-bottom:16px; font-weight:700; }
+    .solution-card p { font-size:16px; line-height:1.8; color:var(--text-gray); }
+
+    /* ================= CTA ================= */
+    .cta-section { padding:120px 40px; background:var(--white); text-align:center; }
+    .cta-section h2 { font-size:48px; margin-bottom:24px; font-weight:800; }
+    .cta-section p { font-size:20px; margin-bottom:40px; color:var(--text-gray); }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:1024px){
+        .hero-content, .steps, .solutions-grid, .features-grid{ grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+        nav{padding:15px 0;}
+        .nav-links{display:none;}
+        .hero{padding:140px 20px 80px;}
+        .hero-text h1{font-size:36px;}
+        .hero-text p{font-size:17px;}
+        .hero-buttons{flex-direction:column;}
+    }
+</style>
 </head>
-
 <body>
-<div class="container">
 
-    <!-- HEADER -->
-    <div class="header">
-        <h1><i class="fas fa-shield-alt"></i> Cardano Fund Governance Protocol</h1>
-        <p>Secure multi-signature fund management with time-locked releases and automated refunds on the Cardano blockchain.</p>
+<!-- NAVIGATION -->
+<nav id="navbar">
+    <div class="nav-container">
+        <div class="logo"><i class="fas fa-shield-alt"></i> <span>Cardano Governance</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#problems">Solutions</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+        </ul>
+        <a href="overview.html" class="nav-cta">Launch App</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Secure <span class="highlight">Multi-Signature</span> Fund Governance</h1>
+            <p>Enterprise-grade governance for organizational funds on the Cardano blockchain. Transparent approvals, time-locked security, and democratic control.</p>
+            <div class="hero-buttons">
+                <a href="overview.html" class="btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
+                <a href="#how-it-works" class="btn-secondary">Learn More <i class="fas fa-book-open"></i></a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="center-vault"><i class="fas fa-lock"></i></div>
+            <div class="official-node node-1"><i class="fas fa-user-check"></i></div>
+            <div class="official-node node-2"><i class="fas fa-user-shield"></i></div>
+            <div class="official-node node-3"><i class="fas fa-user-lock"></i></div>
+            <div class="official-node node-4"><i class="fas fa-user-tie"></i></div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <h2>Core Features</h2>
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-users-cog"></i></div><h3>Multi-Signature Approval</h3><p>Funds are released only after reaching a predefined approval threshold.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-clock"></i></div><h3>Time-Locked Refunds</h3><p>If approvals fail before the deadline, owners can safely reclaim funds.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-eye"></i></div><h3>Full Transparency</h3><p>Every action is recorded on-chain and publicly verifiable.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-check"></i></div><h3>Enterprise Security</h3><p>Plutus smart contracts enforce rules without centralized control.</p></div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step"><span>1</span><h3>Lock Funds</h3><p>Funds are deposited into a secure Plutus escrow contract.</p></div>
+        <div class="step"><span>2</span><h3>Approve Proposal</h3><p>Authorized officials submit cryptographic approvals.</p></div>
+        <div class="step"><span>3</span><h3>Execute or Refund</h3><p>Funds are released or refunded automatically based on conditions.</p></div>
+    </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section id="problems">
+    <h2>Problems We Solve</h2>
+    <div class="solutions-grid">
+        <div class="solution-card"><h3>Misuse of Funds</h3><p>No single party can unilaterally move funds.</p></div>
+        <div class="solution-card"><h3>Lack of Trust</h3><p>Smart contracts replace trust with verifiable logic.</p></div>
+        <div class="solution-card"><h3>Opaque Governance</h3><p>Every approval and transaction is visible on-chain.</p></div>
+    </div>
+</section>
+
+<!-- CTA -->
+<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>About Cardano Governance</h3>
+            <p>Secure multi-signature fund management on the Cardano blockchain. Transparency, trust, and security at every step.</p>
+            <div class="social-links">
+                <a href="https://x.com/wimscardano?s=11" target="_blank" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://github.com/wimsio" target="_blank" class="social-icon">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://discord.com/channels/1221427865287917589/1221428481485967491" target="_blank" class="social-icon">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="https://t.me/coxygenglobal/1" target="_blank" class="social-icon">
+                    <i class="fab fa-telegram"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#problems">Solutions</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h3>Resources</h3>
+            <ul>
+                <li><a href="overview.html">Launch App</a></li>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">FAQs</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <ul>
+                <li>Email: <a href="mailto:cto@wims.io">cto@wims.io</a></li>
+                <li>Phone: <a href="tel:+1234567890">+1 234 567 890</a></li>
+                <li>Address: 123 Blockchain Ave, Cardano City</li>
+            </ul>
+        </div>
     </div>
 
-    <div class="content">
-
-        <!-- STATUS INDICATOR -->
-        <div class="status-indicator">
-            <i class="fas fa-sync-alt pulse"></i>
-            <div class="status-text">
-                <h4>Protocol Status: Active</h4>
-                <p>Connect your Cardano wallet to interact with the governance protocol. Ensure you have sufficient ADA for transaction fees.</p>
-            </div>
-        </div>
-
-        <!-- DEPOSIT -->
-        <div class="card">
-            <h2><i class="fas fa-lock"></i> Deposit Funds</h2>
-            <p class="card-description">Lock ADA in the governance contract with custom approval requirements.</p>
-
-            <div class="input-group">
-                <label>Deposit Amount (ADA) <span class="tooltip">ⓘ<span class="tooltiptext">Minimum 5 ADA required for contract deployment</span></span></label>
-                <input type="number" id="depositAmt" placeholder="e.g. 100" min="5" step="0.1">
-            </div>
-
-            <div class="input-group">
-                <label>Owner Address</label>
-                <input type="text" id="owner" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
-            </div>
-
-            <div class="input-group">
-                <label>Official 1 Address</label>
-                <input type="text" id="fdOfficial1" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
-            </div>
-
-            <div class="input-group">
-                <label>Official 2 Address</label>
-                <input type="text" id="fdOfficial2" placeholder="addr1..." pattern="^addr[0-9a-z]+$">
-            </div>
-
-            <div class="input-group">
-                <label>Required Approvals <span class="tooltip">ⓘ<span class="tooltiptext">Number of approvals needed to release funds (1-2)</span></span></label>
-                <input type="number" id="req" placeholder="2" min="1" max="2" value="2">
-            </div>
-
-            <div class="input-group">
-                <label>Deadline (Days) <span class="tooltip">ⓘ<span class="tooltiptext">After this period, refund becomes available if insufficient approvals</span></span></label>
-                <input type="number" id="deadlineDays" placeholder="30" min="1" max="365" value="30">
-            </div>
-
-            <button class="btn btn-primary" id="depositBtn">
-                <i class="fas fa-arrow-down"></i> Lock Funds
-            </button>
-        </div>
-
-        <!-- APPROVAL -->
-        <div class="card">
-            <h2><i class="fas fa-check-double"></i> Approve Release</h2>
-            <p class="card-description">Authorized officials can approve fund releases. Each approval is recorded on-chain and counted toward the required threshold.</p>
-
-            <div class="input-group">
-                <label>Contract ID <span class="tooltip">ⓘ<span class="tooltiptext">Enter the contract ID from the deposit transaction</span></span></label>
-                <input type="text" id="contractId" placeholder="Transaction hash">
-            </div>
-
-            <div class="input-group">
-                <label>Official Address</label>
-                <input type="text" id="approverAddress" placeholder="Your official address">
-            </div>
-
-            <button class="btn btn-success" id="approveBtn">
-                <i class="fas fa-thumbs-up"></i> Submit Approval
-            </button>
-        </div>
-
-        <!-- RELEASE -->
-        <div class="card">
-            <h2><i class="fas fa-unlock-alt"></i> Release Funds</h2>
-            <p class="card-description">Release locked funds after reaching required approvals before the deadline.</p>
-
-            <div class="input-group">
-                <label>Contract ID</label>
-                <input type="text" id="releaseContractId" placeholder="Transaction hash">
-            </div>
-
-            <div class="input-group">
-                <label>Recipient Address</label>
-                <input type="text" id="recipientAddress" placeholder="Funds destination address">
-            </div>
-
-            <button class="btn btn-success" id="releaseBtn">
-                <i class="fas fa-paper-plane"></i> Execute Release
-            </button>
-        </div>
-
-        <!-- REFUND -->
-        <div class="card">
-            <h2><i class="fas fa-history"></i> Refund Expired</h2>
-            <p class="card-description">Refund locked funds to owner after deadline if insufficient approvals were received.</p>
-
-            <div class="input-group">
-                <label>Contract ID</label>
-                <input type="text" id="refundContractId" placeholder="Transaction hash">
-            </div>
-
-            <div class="input-group">
-                <label>Owner Verification</label>
-                <input type="text" id="ownerVerification" placeholder="Original owner address">
-            </div>
-
-            <button class="btn btn-danger" id="refundBtn">
-                <i class="fas fa-arrow-left"></i> Initiate Refund
-            </button>
-        </div>
-
-        <!-- INFO -->
-        <div class="info-panel">
-            <h3><i class="fas fa-info-circle"></i> Protocol Governance Model</h3>
-            <p>
-                The Cardano Fund Governance Protocol implements a secure multi-signature escrow system. 
-                Funds are locked in a Plutus smart contract and require a predetermined number of approvals 
-                from authorized officials before release. If the approval threshold isn't met before the 
-                deadline, the original owner can claim a refund. All transactions are immutable, transparent, 
-                and verifiable on the Cardano blockchain.
-            </p>
-            <p style="margin-top: 15px; font-weight: 500;">
-                <i class="fas fa-shield-check"></i> Security Features: On-chain validation • Time-locked refunds • 
-                Multi-signature requirements • Address whitelisting
-            </p>
-        </div>
-
-        <!-- LOG -->
-        <div class="log-container" id="log">
-=== SYSTEM INITIALIZED ===
-• Cardano Fund Governance Protocol v1.0
-• Ready to connect to blockchain
-• Waiting for wallet connection...
-        </div>
-
+    <div class="footer-bottom">
+        &copy; 2026 Cardano Governance. All Rights Reserved.
     </div>
-</div>
+</footer>
 
-<script type="module" src="./app.js"></script>
-</body>
-</html>
+<style>
+/* ================= FOOTER ================= */
+.site-footer {
+    background: #0a0e27;
+    color: #fff;
+    padding: 80px 40px 40px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+}
+
+.footer-section h3 {
+    font-size: 20px;
+    margin-bottom: 24px;
+    font-weight: 700;
+    position: relative;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(135deg, #0066cc, #00aaff);
+    left: 0;
+    bottom: -8px;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.footer-section h3:hover::after {
+    width: 100%;
+}
+
+.footer-section p, .footer-section li {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.footer-section ul { list-style: none; padding: 0; margin: 0; }
+.footer-section li { margin-bottom: 12px; }
+.footer-section a {
+    color: rgba(255,255,255,0.7);
+    transition: all 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #00aaff;
+    transform: translateX(5px);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.social-icon i { transition: transform 0.4s ease; }
+
+.social-icon:hover {
+    background: linear-gradient(135deg, #0066cc, #00aaff);
+    transform: translateY(-5px) rotate(10deg);
+}
+
+.social-icon:hover i {
+    transform: scale(1.2) rotate(-10deg);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {opacity:0; transform:translateY(30px);}
+    to {opacity:1; transform:translateY(0);}
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+    .footer-content { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+@media (max-width: 768px) {
+    .footer-content { grid-template-columns: 1fr; gap: 30px; }
+    .social-links { justify-content: center; }
+}
+</style>
